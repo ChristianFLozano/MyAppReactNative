@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text , TextInput , ImageBackground, StyleSheet, Dimensions, ScrollView, Button, Alert} from 'react-native';
+import { supabase } from './SupaBase';
+
 
 const { height } = Dimensions.get('window');
 
@@ -7,29 +9,36 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            usuario:"",
+            correo:"",
             contra: "",
         };
     }
 
     render() {
-        const log = () =>{
+        const loggin = async() =>{0
             
-            if (this.state.usuario === "" || this.state.contra === "") {
+            const {error} = await supabase.auth.signInWithPassword({
+
+                email:this.state.correo,
+                password:this.state.contra
+
+            })
+
+            if (error) {
                 Alert.alert("Error al iniciar sesion","Asegurese que las credenciales sean correctas o esten llenos los campos")
                 
             }
             else{
-                //Falta validacion de existencia del usuario
-                Alert.alert("Inicio correcto",`Bienvenido ${this.state.usuario}`, )
+                Alert.alert("Inicio correcto",`Bienvenido ${this.state.correo}`, )
             }
 
 
             this.setState({
-                usuario: "",
+                correo: "",
                 contra: ""
             });
         }
+
         return (
         <View style={style.container}>
             <ScrollView >
@@ -37,10 +46,10 @@ export default class Login extends Component {
                 <View style={style.inputView}>
                     <View style={style.viewLabel}>
                         <Text style={style.label}>
-                            Usuario 
+                            Correo 
                         </Text>
                     </View>
-                    <TextInput style={style.input} placeholderTextColor={"gray"}  placeholder='Ingresa tu usuario' value={this.state.usuario} onChangeText={usuario => this.setState({usuario})}/>
+                    <TextInput style={style.input} placeholderTextColor={"gray"}  placeholder='Ingresa tu correo' value={this.state.correo} onChangeText={correo => this.setState({correo})}/>
                     <View style={style.viewLabel}>
                         <Text style={style.label}>
                             Contraseña 
@@ -48,7 +57,7 @@ export default class Login extends Component {
                     </View>
                     <TextInput style={style.input} placeholderTextColor={"gray"} placeholder='Ingresa tu contraseña' secureTextEntry={true} value={this.state.contra} onChangeText={contra => this.setState({contra})}/>
                     <View style={style.viewButton}>
-                        <Button title='Ingresar' onPress={log} color={"black"} />
+                        <Button title='Ingresar' onPress={loggin} color={"black"} />
                     </View>
                     
                 </View>
