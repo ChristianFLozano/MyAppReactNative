@@ -15,8 +15,7 @@ export default class Login extends Component {
     }
 
     render() {
-        const loggin = async() =>{0
-            
+        const loggin = async() =>{
             const {error} = await supabase.auth.signInWithPassword({
 
                 email:this.state.correo,
@@ -26,10 +25,10 @@ export default class Login extends Component {
 
             if (error) {
                 Alert.alert("Error al iniciar sesion","Asegurese que las credenciales sean correctas o esten llenos los campos")
-                
             }
             else{
                 Alert.alert("Inicio correcto",`Bienvenido ${this.state.correo}`, )
+                this.props.navigation.navigate('Dashboard')
             }
 
 
